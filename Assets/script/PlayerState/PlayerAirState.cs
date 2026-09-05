@@ -1,6 +1,6 @@
-
 using System.Collections;
 using UnityEngine;
+
 public class PlayerAirState : PlayerState
 {
     public PlayerAirState(string animBoolName, Player player, PlayerStateMachine stateMachine)
@@ -38,10 +38,10 @@ public class PlayerAirState : PlayerState
             stateMachine.ChangeState(player.dashState);
         }
 
-        // ¤ô¥­ªÅ¤¤¾Ş±±
+        // ç©ºä¸­çš„æ°´å¹³æ“æ§
         player.SetVelocty(xInput * 5, player.rb.velocity.y);
 
-        // ====== 1. ¸¨¦a´N¦^ Idle ======
+        // ====== 1. è½åœ°å°±å› Idle ======
         if (player.IsGroundDetected())
         {
             player.SetVelocty(0, player.rb.velocity.y);
@@ -49,19 +49,16 @@ public class PlayerAirState : PlayerState
             return;
         }
 
-        // ====== 2. ½T©w­n¡u·ÆÀğ¡vªº±ø¥ó ======
-        // »İ­n¡G¦³Àğ + ¨S½ò¦a + ¦³©¹Àğ±À + ¥¿¦b©¹¤U±¼
+        // ====== 2. ç¢ºå®šè¦ã€Œè²¼ç‰†ã€çš„æ¢ä»¶ ======
+        // éœ€è¦ï¼šç¢°åˆ°ç‰† + æ²’æœ‰åœ°æ¿ + é¢å‘ç‰† + æ­£åœ¨å¾€ä¸‹æ‰
         if (player.IsWallDetected() &&
             !player.IsGroundDetected() &&
             xInput * player.facingDir > 0)
         {
-           
             stateMachine.ChangeState(player.wallSlideState);
             return;
         }
-        else
-        { }
 
-            // ¨ä¥L±¡ªp´Nºû«ùªÅ¤¤ª¬ºA
-        }
+        // å…¶ä»–æƒ…æ³å°±ç¶­æŒç©ºä¸­ç‹€æ…‹
+    }
 }

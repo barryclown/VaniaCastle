@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class PlayerAimSwordState : PlayerState
 {
+    private Camera cam;
+
     public PlayerAimSwordState(string animBoolName, Player player, PlayerStateMachine stateMachine) : base(animBoolName, player, stateMachine)
     {
     }
 
     public override void Enter()
     {
-        
-    
-    SkillManager.instance.Sword.SetSwordGravity();
+        cam = Camera.main;
+        SkillManager.instance.Sword.SetSwordGravity();
         base.Enter();
-        
     }
 
     public override void Exit()
@@ -36,7 +36,8 @@ public class PlayerAimSwordState : PlayerState
         if(Input.GetKeyUp(KeyCode.Mouse1))
             stateMachine.ChangeState(player.idleState);
 
-        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        if (cam == null) cam = Camera.main;
+        Vector2 mousePosition = cam.ScreenToWorldPoint(Input.mousePosition);
         bool mouseIsRight = mousePosition.x < player.transform.position.x;
         player.Flip(mouseIsRight);
     }

@@ -48,20 +48,11 @@ public class CloneController : MonoBehaviour
         Collider2D[] collider = Physics2D.OverlapCircleAll(attackCheck.transform.position, attackCheckRadius);
         foreach (var collider2d in collider)
         {
-            if (collider2d.GetComponent<Enemy>() != null)
+            Enemy enemy = collider2d.GetComponent<Enemy>();
+            if (enemy != null)
             {
-                Enemy enemy = collider2d.GetComponent<Enemy>();
-                if (enemy.transform.position.x > transform.position.x && enemy.facingDir > 0 || enemy.transform.position.x < transform.position.x && enemy.facingDir < 0)
-                {
-                    enemy.Damage(true);
-                }
-                else
-                {
-                    enemy.Damage(false);
-                }
-
+                enemy.Damage(PlayerManager.instance.player.attackDamage, enemy.IsBackAttacked(transform.position));
             }
-
         }
     }
     private void CheckTarget()
@@ -69,16 +60,13 @@ public class CloneController : MonoBehaviour
         Collider2D[] collider = Physics2D.OverlapCircleAll(transform.position, 25);
         foreach (var collider2d in collider)
         {
-            if (collider2d.GetComponent<Enemy>() && closestEnemy == null)
-            {
-                closestEnemy = collider2d;            
-            }
-            if (collider2d.GetComponent<Enemy>())
-            {
-                if (Vector3.Distance(transform.position, collider2d.transform.position) < Vector3.Distance(transform.position, closestEnemy.transform.position))
-                    closestEnemy = collider2d;
-
-            }
+            Enemy en = collider2d.GetComponent<Enemy>();
+            if (en == null)
+                continue;
+            if (closestEnemy == null)
+                closestEnemy = collider2d;
+            if (Vector3.Distance(transform.position, collider2d.transform.position) < Vector3.Distance(transform.position, closestEnemy.transform.position))
+                closestEnemy = collider2d;
         }
         if (closestEnemy!=null&&closestEnemy.transform.position.x < transform.position.x)
             transform.Rotate(0, 180, 0);

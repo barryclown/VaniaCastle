@@ -29,6 +29,19 @@ public class Entity : MonoBehaviour
     [Header("Facing")]
     public float facingDir = 1;
     public bool isFacingRight = true;
+    // 依速度自動翻面：玩家要（面向移動方向），敵人不要（靠 state/控制器刻意設面向，
+    // 否則後退/被擊退時速度反向會把敵人自動轉成背對玩家＝倒著走）
+    protected virtual bool AutoFlipByVelocity => true;
+
+    [Header("Health")]
+    [SerializeField] protected int maxHealth = 100;
+    [Tooltip("此實體每次被擊中所受到的傷害（舊式：受害者端固定值，沒指定攻擊者傷害時的退路）")]
+    [SerializeField] protected int hitDamage = 10;
+    [Tooltip("此實體攻擊造成的傷害（攻擊者端，傳給 Damage(int,bool)）")]
+    public int attackDamage = 10;
+    public int currentHealth { get; protected set; }
+    public int MaxHealth => maxHealth;
+    public bool IsDead => currentHealth <= 0;
 
     protected virtual void Awake()
     {
@@ -36,6 +49,7 @@ public class Entity : MonoBehaviour
 
     protected virtual void Start()
     {
+        currentHealth = maxHealth;
         fx = GetComponentInChildren<EntityFX>();
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponentInChildren<Animator>();
@@ -119,7 +133,10 @@ public class Entity : MonoBehaviour
     // ===== 根據速度自動翻面（只有走路時會生效） =====
     public void FlipController()
     {
-     Debug.Log("canFlip: " + canFlip + ", isKnocked: " + isKnocked);
+        // 敵人不用速度自動翻面（避免後退/擊退時被轉成背對＝倒著走）
+        if (!AutoFlipByVelocity)
+            return;
+
         // 被擊退 or 被鎖翻面時，關閉自動翻面
         if (isKnocked || !canFlip)
             return;
@@ -137,12 +154,62 @@ public class Entity : MonoBehaviour
     }
 
     // ===== 受傷 / 擊退 =====
-    public virtual void Damage(bool isBackAttack)
+    // 統一背刺判定：依 target(this) 相對攻擊者的位置與自身朝向，回傳是否為背面受擊。
+    // 取代散落在 PlayerAnimation / SkeletonAnimation / SwordController 的重複表達式。
+    public bool IsBackAttacked(Vector3 attackerPosition)
     {
+        return (transform.position.x > attackerPosition.x && facingDir > 0)
+            || (transform.position.x < attackerPosition.x && facingDir < 0);
+    }
+
+    // 主要：由攻擊者指定傷害值
+    public virtual void Damage(int damage, bool isBackAttack)
+    {
+        if (IsDead)
+            return;
+
+        ApplyHealthLoss(damage);
+
+        StartCoroutine(HitKnockback(isBackAttack));
+
+        if (IsDead)
+            Die();
+    }
+
+    // 環境傷害（掉出地圖、陷阱）：只扣血不擊退。
+    // 擊退會把剛送回地板的角色又推出去，所以這條路徑刻意不跑 HitKnockback。
+    public virtual void DamageWithoutKnockback(int damage)
+    {
+        if (IsDead)
+            return;
+
+        ApplyHealthLoss(damage);
+
+        if (IsDead)
+            Die();
+    }
+
+    private void ApplyHealthLoss(int damage)
+    {
+        currentHealth -= damage;
+        if (currentHealth < 0)
+            currentHealth = 0;
+
         if (fx != null)
             fx.StartCoroutine("FlashWhiteFX");
 
-        StartCoroutine(HitKnockback(isBackAttack));
+        if (SfxManager.instance != null)
+            SfxManager.instance.PlayHit();
+    }
+
+    // 相容：沒指定攻擊者傷害時，退回受害者端 hitDamage
+    public virtual void Damage(bool isBackAttack)
+    {
+        Damage(hitDamage, isBackAttack);
+    }
+
+    protected virtual void Die()
+    {
     }
 
     protected virtual IEnumerator HitKnockback(bool isBackAttack)

@@ -59,8 +59,7 @@ public class SwordController : MonoBehaviour
     }
     public void Update()
     {
-        Debug.Log(spinDir);
-        if (canRoate) 
+        if (canRoate)
         transform.right = rb.velocity;
         if (isReturning)
         {
@@ -74,14 +73,8 @@ public class SwordController : MonoBehaviour
             transform.position = Vector2.MoveTowards(transform.position, enemyTarget[tragetIndex].position, Time.deltaTime * 20);
             if (Vector2.Distance(transform.position, enemyTarget[tragetIndex].position) <= .1f)
             {
-                if (enemyTarget[tragetIndex].transform.position.x > transform.position.x && enemyTarget[tragetIndex].GetComponent<Enemy>().facingDir > 0 || enemyTarget[tragetIndex].transform.position.x < transform.position.x && enemyTarget[tragetIndex].GetComponent<Enemy>().facingDir < 0)
-                {
-                    enemyTarget[tragetIndex].GetComponent<Enemy>().Damage(true);
-                }
-                else
-                {
-                    enemyTarget[tragetIndex].GetComponent<Enemy>().Damage(false);
-                }
+                Enemy bounceEnemy = enemyTarget[tragetIndex].GetComponent<Enemy>();
+                bounceEnemy.Damage(player.attackDamage, bounceEnemy.IsBackAttacked(transform.position));
                 tragetIndex++;
                 amountOfBounce--;
                 if (amountOfBounce < 0)
@@ -127,21 +120,14 @@ public class SwordController : MonoBehaviour
     {
         if (isReturning)
             return;
-        if (collision.GetComponent<Enemy>() != null)
-        {
-            Enemy enemy = collision.GetComponent<Enemy>();
-            if (enemy.transform.position.x > transform.position.x && enemy.facingDir > 0 || enemy.transform.position.x < transform.position.x && enemy.facingDir < 0)
-            {
-                enemy.Damage(true);
-            }
-            else
-            {
-                enemy.Damage(false);
-            }
 
+        Enemy enemy = collision.GetComponent<Enemy>();
+        if (enemy != null)
+        {
+            enemy.Damage(player.attackDamage, enemy.IsBackAttacked(transform.position));
         }
-       
-        if (collision.GetComponent<Enemy>() != null)
+
+        if (enemy != null)
             if (isBouncing && enemyTarget.Count <= 0)
             {
                 Collider2D[] colider = Physics2D.OverlapCircleAll(transform.position, 10);
@@ -151,7 +137,7 @@ public class SwordController : MonoBehaviour
                         enemyTarget.Add(item.transform);
                 }
             }
-        if (amountOfPierce > 0 && collision.GetComponent<Enemy>() != null)
+        if (amountOfPierce > 0 && enemy != null)
         {
             amountOfPierce--;
             return;
@@ -172,7 +158,7 @@ public class SwordController : MonoBehaviour
         canRoate = false;
         cd.enabled = false;
         rb.isKinematic = true;
-        //Åý¼C¯à¥d¦bÀð¤W
+        //ï¿½ï¿½ï¿½Cï¿½ï¿½dï¿½bï¿½ï¿½W
         if(isBouncing&&enemyTarget.Count>0)
             return ;
       

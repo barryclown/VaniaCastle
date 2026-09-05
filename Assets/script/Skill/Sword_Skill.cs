@@ -22,9 +22,11 @@ public class Sword_Skill : Skill
     [SerializeField] private GameObject dotsPerfab;
     [SerializeField] private Transform dotsParent;
     public GameObject[] dots;
+    private Camera cam;
     protected override void Start()
     {
         base.Start();
+        cam = Camera.main;
         GenerateDots();
     }
     protected override void Update()
@@ -76,7 +78,8 @@ public class Sword_Skill : Skill
     }
     public Vector2 AimDirection()
     {
-        return player.transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        if (cam == null) cam = Camera.main;
+        return player.transform.position - cam.ScreenToWorldPoint(Input.mousePosition);
     }
     public void DotsActive(bool isActive)
     {
@@ -98,27 +101,25 @@ public class Sword_Skill : Skill
     {
         return (Vector2)player.transform.position +
         new Vector2(AimDirection().normalized.x * lanchForce.x,
-        //ª«²zªº¤½¦¡ ­«¤O¥[³t«×
+        //ï¿½ï¿½ï¿½zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Oï¿½[ï¿½tï¿½ï¿½
         AimDirection().normalized.y * lanchForce.y) * t + 0.5f * Physics2D.gravity * swordGravity * t * t;
     }
     public void SwitchSwordType()
     {
-        // ¨ú±o¥Ø«e¼Ò¦¡¹ïÀ³ªº¾ã¼Æ
+        // ï¿½ï¿½ï¿½oï¿½Ø«eï¿½Ò¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         int current = (int)swordType;
 
-        // enum ¼Æ¶q
+        // enum ï¿½Æ¶q
         int total = System.Enum.GetNames(typeof(SwordType)).Length;
 
-        // ¤U¤@­Ó¡]¶W¹L´N¦^ 0¡^
+        // ï¿½Uï¿½@ï¿½Ó¡]ï¿½Wï¿½Lï¿½Nï¿½^ 0ï¿½^
         current = (current + 1) % total;
 
-        // ³]©w·s¼Ò¦¡
+        // ï¿½]ï¿½wï¿½sï¿½Ò¦ï¿½
         swordType = (SwordType)current;
 
-        // §ó·s­«¤O
+        // ï¿½ï¿½sï¿½ï¿½ï¿½O
         SetSwordGravity();
-
-        Debug.Log("Sword¤Á´«¬°¡G" + swordType);
     }
 
 }

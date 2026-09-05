@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerCounterAttackState : PlayerState
 {
-    // ·s¼W¤@­ÓÅÜ¼Æ¨Ó°O¿ı¬O§_¤w¸g¦¨¥\Ä²µo¤ÏÀ»
+    // ï¿½sï¿½Wï¿½@ï¿½ï¿½ï¿½Ü¼Æ¨Ó°Oï¿½ï¿½ï¿½Oï¿½_ï¿½wï¿½gï¿½ï¿½ï¿½\Ä²ï¿½oï¿½ï¿½ï¿½ï¿½
     private bool isCountering;
 
     public PlayerCounterAttackState(string animBoolName, Player player, PlayerStateMachine stateMachine) : base(animBoolName, player, stateMachine)
@@ -13,10 +13,9 @@ public class PlayerCounterAttackState : PlayerState
 
     public override void Enter()
     {
-        Debug.Log("Enter CounterAttack State");
         base.Enter();
-        // ªì©l¤Æ
-        stateTimer = 0.5f; // ³o¬O¡uÂ\¥X¬[¶Õ¡vµ¥«İ¼Ä¤H§ğÀ»ªº®É¶¡
+        // ï¿½ï¿½lï¿½ï¿½
+        stateTimer = 0.5f; // ï¿½oï¿½Oï¿½uï¿½\ï¿½Xï¿½[ï¿½Õ¡vï¿½ï¿½ï¿½İ¼Ä¤Hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¶ï¿½
         isCountering = false;
         player.anim.SetBool("CounterAttackSuccess", false);
     }
@@ -24,7 +23,7 @@ public class PlayerCounterAttackState : PlayerState
     public override void Exit()
     {
         base.Exit();
-        // ¡iÃöÁä­×¥¿¡jÂ÷¶}ª¬ºA®É¡A°È¥²±N Success ³]¦^ false¡A§_«h¤U¦¸©Î¦^¨ì Idle ®É·|¥d¦í
+        // ï¿½iï¿½ï¿½ï¿½ï¿½×¥ï¿½ï¿½jï¿½ï¿½ï¿½}ï¿½ï¿½ï¿½Aï¿½É¡Aï¿½È¥ï¿½ï¿½N Success ï¿½]ï¿½^ falseï¿½Aï¿½_ï¿½hï¿½Uï¿½ï¿½ï¿½Î¦^ï¿½ï¿½ Idle ï¿½É·|ï¿½dï¿½ï¿½
         player.anim.SetBool("CounterAttackSuccess", false);
     }
 
@@ -33,7 +32,7 @@ public class PlayerCounterAttackState : PlayerState
         base.Update();
         player.SetVelocty(0, 0);
 
-        // ­Y¤ÏÀ»¦¨¥\¡Aµ¥«İ°Êµeµ²§ô
+        // åæ“Šå·²æˆåŠŸï¼Œç­‰å¾…åæ“Šå‹•ç•«æ’­å®Œå†å› Idle
         if (isCountering)
         {
             if (triggerCalled)
@@ -43,7 +42,7 @@ public class PlayerCounterAttackState : PlayerState
             return;
         }
 
-        // ÀË´ú¬O§_¤ÏÀ»¦¨¥\
+        // åµæ¸¬æ”»æ“Šç¯„åœå…§æ˜¯å¦æœ‰å¯è¢«åæ“Šï¼ˆæšˆçœ©ï¼‰çš„æ•µäºº
         Collider2D[] collider = Physics2D.OverlapCircleAll(player.transform.position, player.attackCheckRadius);
         foreach (var collider2d in collider)
         {
@@ -53,10 +52,13 @@ public class PlayerCounterAttackState : PlayerState
                 player.anim.SetBool("CounterAttackSuccess", true);
                 isCountering = true;
                 triggerCalled = false;
+
+                // åæ“ŠæˆåŠŸé€ æˆå‚·å®³ï¼ˆåæ“Šé«˜å›å ±ï¼ç©å®¶æ”»æ“ŠåŠ› 2 å€ï¼‰
+                enemy.Damage(player.attackDamage * 2, enemy.IsBackAttacked(player.transform.position));
             }
         }
 
-        // Â\¥X¬[¶Õ¦ı¨S¤ÏÀ»¦¨¥\ ¡÷ Timeout
+        // åæ“Šåˆ¤å®šçª—å…§æ²’æœ‰æˆåŠŸ â†’ é€¾æ™‚å› Idle
         if (!isCountering && stateTimer < 0)
         {
             stateMachine.ChangeState(player.idleState);

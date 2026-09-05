@@ -10,10 +10,10 @@ public class SkillManager : MonoBehaviour
     public Sword_Skill Sword{get; private set;}
     public void Awake()
     {
-        if(instance!=null)
-            Destroy(instance);
+        if (instance != null && instance != this)
+            Destroy(gameObject);
         else
-        instance = this;
+            instance = this;
     }
     public void Start()
     {

@@ -34,7 +34,14 @@ public class PlayerWallSlideState : PlayerState
             stateMachine.ChangeState(player.idleState);
             return;
         }
-            
+
+        // 2. 沒牆了就強制退出滑牆（滑出牆緣時就算沒放開也不再黏著繼續滑）
+        if (!onWall)
+        {
+            stateMachine.ChangeState(player.airState);
+            return;
+        }
+
         // 3. 從牆上跳開
         if (Input.GetKeyDown(KeyCode.Space))
         {

@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class SkeletonAnimation : MonoBehaviour
 {
-    private Skeleton skeleton => GetComponentInParent<Skeleton>();
+    private Skeleton skeleton;
+
+    private void Awake()
+    {
+        skeleton = GetComponentInParent<Skeleton>();
+    }
 
     private void AnimatonTrigger()
     {
@@ -15,18 +20,10 @@ public class SkeletonAnimation : MonoBehaviour
         Collider2D[] collider = Physics2D.OverlapCircleAll(skeleton.transform.position, skeleton.attackCheckRadius);
         foreach (var collider2d in collider)
         {
-            if (collider2d.GetComponent<Player>() != null)
+            Player enermy = collider2d.GetComponent<Player>();
+            if (enermy != null)
             {
-                Player enermy = collider2d.GetComponent<Player>();
-                if (enermy.transform.position.x > transform.position.x && enermy.facingDir > 0 || enermy.transform.position.x < transform.position.x && enermy.facingDir < 0)
-                {
-                    enermy.Damage(true);
-                }
-                else
-                {
-                    enermy.Damage(false);
-                }
-
+                enermy.Damage(skeleton.attackDamage, enermy.IsBackAttacked(transform.position));
             }
         }
     }

@@ -37,7 +37,6 @@ public class PlayerJumpState : PlayerState
            !player.IsGroundDetected() &&
            xInput * player.facingDir > 0)
         {
-            Debug.Log("Ä²µo·ÆÀð±ø¥ó");
             stateMachine.ChangeState(player.wallSlideState);
             return;
         }

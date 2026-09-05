@@ -15,21 +15,12 @@ public class PlayerAnimation : MonoBehaviour
         Collider2D[] collider = Physics2D.OverlapCircleAll(player.attackCheck.transform.position,player.attackCheckRadius);
         foreach (var collider2d in collider)
         {
-            if (collider2d.GetComponent<Enemy>() != null)
+            Enemy enemy = collider2d.GetComponent<Enemy>();
+            if (enemy != null)
             {
-                Enemy enemy = collider2d.GetComponent<Enemy>();
-                if (enemy.transform.position.x>transform.position.x&& enemy.facingDir>0|| enemy.transform.position.x < transform.position.x && enemy.facingDir < 0)
-                {
-                    enemy.Damage(true);
-                }
-                else
-                {
-                    enemy.Damage(false);
-                }
-               
+                enemy.Damage(player.attackDamage, enemy.IsBackAttacked(transform.position));
             }
-               
-        }   
+        }
     }
     private void AttackStart()
     {

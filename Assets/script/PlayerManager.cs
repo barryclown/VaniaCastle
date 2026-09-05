@@ -8,8 +8,8 @@ public class PlayerManager : MonoBehaviour
     public Player player;
     public void Awake()
     {
-        if (instance != null)
-            Destroy(instance);
+        if (instance != null && instance != this)
+            Destroy(gameObject);
         else
             instance = this;
     }

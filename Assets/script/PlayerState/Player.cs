@@ -79,4 +79,14 @@ public class Player : Entity
             return false;
         }
     }
+
+    protected override void Die()
+    {
+        base.Die();
+        // 改為顯示死亡介面（凍結＋RETRY/MAIN MENU）；沒有介面時退回直接重載本關
+        if (DeathScreenController.Instance != null)
+            DeathScreenController.Instance.Show();
+        else
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 }
