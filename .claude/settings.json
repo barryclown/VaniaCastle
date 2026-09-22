@@ -49,7 +49,11 @@
       "PowerShell(git push -f*)",
       "PowerShell(git push * -f*)",
       "PowerShell(git -C * push *--force*)",
-      "PowerShell(git branch -D *)"
+      "PowerShell(git branch -D *)",
+      "Bash(git stash drop*)",
+      "Bash(git stash clear*)",
+      "PowerShell(git stash drop*)",
+      "PowerShell(git stash clear*)"
     ]
   }
 }

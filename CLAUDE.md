@@ -120,9 +120,9 @@
    - `IMPLEMENTATION_PLAN.md` 每個階段**驗證通過後**。
    - 收工前：`git status` 應該是乾淨的；刻意留著不 commit 的，回報時講原因。
    訊息寫「做了什麼」，一次 commit 放一件事；還沒實機測過的在訊息裡註明。
-2. **要先問**：push、改寫已推送的歷史（`rebase`／`commit --amend`）、force push、刪分支、丟棄未 commit 的改動（`reset --hard`／`checkout -- <路徑>`／`restore`／`clean`）。
+2. **要先問**：push、改寫已推送的歷史（`rebase`／`commit --amend`）、force push、刪分支、丟棄未 commit 的改動（`reset --hard`／`checkout -- <路徑>`／`restore`／`clean`）、刪除暫存（`stash drop`／`stash clear`）。
    例外：自己這一輪 build 連帶產生的已知雜訊（清單見 `CLAUDE-setup.md` 第五節）可直接還原，回報時列出。
-   其中 `reset --hard`、`clean`、整棵 `checkout -- .`／`restore .`、force push、`branch -D` 已由 settings deny 硬擋（Bash 與 PowerShell 都擋）；被擋就停下來請人在終端機自己跑，不要換寫法繞過。
+   其中 `reset --hard`、`clean`、整棵 `checkout -- .`／`restore .`、force push、`branch -D`、`stash drop`／`stash clear` 已由 settings deny 硬擋（Bash 與 PowerShell 都擋）；被擋就停下來請人在終端機自己跑，不要換寫法繞過。
 3. **commit 前檢查**：`git status --porcelain -uall` 全量看、不准截斷；新素材（png/wav/mat/anim…）沒被 `.gitignore` 吃掉；只有換行符變化的檔案不當成內容修改。做法見 `CLAUDE-setup.md` 第五節。
 4. **截圖不進專案**：MCP 截圖一律帶 `output_folder="Temp/Screenshots"`（`Temp/` 不會被匯入、不進版控）；要留的搬到 `%USERPROFILE%\Desktop\claude\unity截圖\<專案名>\`。
 

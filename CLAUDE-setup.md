@@ -251,8 +251,8 @@ ProBuilder / VFX Graph：2D 專案用不到，不裝。Cinemachine：那顆按�
 - 一勞永逸：Unity 連上時用 `execute_code` 跑一次 `UnityEditor.EditorPrefs.SetString("MCPForUnity_ScreenshotsFolder", "Temp/Screenshots");`。EditorPrefs 是每使用者共用，設一次這台機器所有專案的預設就改掉了。
 
 ### 不用問的 vs 要問的
-- 不用問：本機 `add`／`commit`、`git diff`、`git log`、`git stash`（stash 不會丟東西）。
-- 要問：`push`、`rebase`、`commit --amend` 已推送的、force push、刪分支、`reset --hard`、`checkout -- <路徑>`／`restore`／`clean`（上面第 3 點的已知 build 雜訊除外）。
-- **硬擋**（`settings-deny.json`，Bash 與 PowerShell 各 13 條）：`git reset …--hard…`、`git clean …`、`git checkout -- .`／`git checkout .`／`git restore .`／`git restore -- .`、`git push …--force…`（含 `--force-with-lease`）／`-f`、`git branch -D …`，以及 `git -C <路徑>` 開頭的 reset／clean／force push。
-  - 2026-09-22 實測：以上寫法全被擋（含 `cd … && git reset --hard` 這種串接、`git reset HEAD --hard` 旗標在後）；單檔 `git checkout -- b.txt` 與一般 `git push origin <分支>` 照常放行。
+- 不用問：本機 `add`／`commit`、`git diff`、`git log`、`git stash`／`git stash list`／`git stash pop`（收進去、拿出來都不會丟東西；`drop`／`clear` 才會）。
+- 要問：`push`、`rebase`、`commit --amend` 已推送的、force push、刪分支、`reset --hard`、`checkout -- <路徑>`／`restore`／`clean`（上面第 3 點的已知 build 雜訊除外）、`stash drop`／`stash clear`。
+- **硬擋**（`settings-deny.json`，Bash 與 PowerShell 各 15 條）：`git reset …--hard…`、`git clean …`、`git checkout -- .`／`git checkout .`／`git restore .`／`git restore -- .`、`git push …--force…`（含 `--force-with-lease`）／`-f`、`git branch -D …`、`git stash drop…`／`git stash clear…`，以及 `git -C <路徑>` 開頭的 reset／clean／force push。
+  - 2026-09-22 實測：以上寫法全被擋（含 `cd … && git reset --hard` 這種串接、`git reset HEAD --hard` 旗標在後、PowerShell 的 `Set-Location …; git stash clear`）；單檔 `git checkout -- b.txt`、一般 `git push origin <分支>`、`git stash list` 照常放行。
   - 這是保險絲不是鐵牆：比對的是指令字串，換寫法（例如包進腳本檔）就漏。所以規則仍是「被擋就停、請人自己跑」，不是「找別的寫法」。
