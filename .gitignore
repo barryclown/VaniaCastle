@@ -101,3 +101,9 @@ InitTestScene*.unity*
 # 開發驗證用截圖，不進版控
 /[Aa]ssets/[Ss]creenshots/
 /[Aa]ssets/[Ss]creenshots.meta
+
+# MCP execute_code 的 Roslyn 是可重建的本機 Editor 工具，不是遊戲素材。
+# 精確排除它，避免約 12 MB 編譯器 DLL 與 importer metadata 進版控。
+/Assets/Plugins/Roslyn/
+/Assets/Plugins/Roslyn.meta
+/Assets/Plugins.meta
