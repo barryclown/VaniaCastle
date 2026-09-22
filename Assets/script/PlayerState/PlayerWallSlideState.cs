@@ -51,7 +51,7 @@ public class PlayerWallSlideState : PlayerState
 
        
         if ( xInput==player.facingDir)
-            player.SetVelocty(0, -2.5f);
+            player.SetVelocty(0, -GameTuning.Player.wallSlideSpeed);
         else
             stateMachine.ChangeState(player.airState);
 

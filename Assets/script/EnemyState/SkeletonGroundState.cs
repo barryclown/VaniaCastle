@@ -6,7 +6,7 @@ public class SkeletonGroundState : EnemyState
     private Transform player => GameObject.Find("Player").transform;
 
     // �i�J�԰��Ϊ��Z�����e�]�� Battle ���䪺 keepRange �p�@�I�^
-    private const float battleEnterRange = 2f;
+    private static float battleEnterRange => GameTuning.Skeleton.battleEnterRange;
 
     public SkeletonGroundState(Enemy enermy, EnemyStateMachine stateMachine, string animBoolName, Skeleton skeleton)
         : base(enermy, stateMachine, animBoolName)

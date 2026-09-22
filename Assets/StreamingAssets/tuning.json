@@ -1,0 +1,36 @@
+{
+  "_說明": "VaniaCastle 數值表。遊戲執行中直接改這裡存檔，畫面上就會立刻變（不用停 Play、不用重 Build）。刪掉某個欄位＝那個值回到遊戲內建設定；整份刪掉＝完全回到 v1.1 原始平衡。",
+  "_編碼": "UTF-8，不要另存成 ANSI／Big5",
+
+  "hotReload": {
+    "enabled": true,
+    "pollSeconds": 0.5,
+    "showToast": true
+  },
+
+  "player": {
+    "moveSpeed": 4.0,
+    "dashSpeed": 25.0,
+    "dashDuration": 0.2,
+    "wallSlideSpeed": 2.5,
+    "counterWindow": 0.5,
+    "counterDamageMultiplier": 2.0
+  },
+
+  "skeleton": {
+    "patrolSpeed": 1.0,
+    "idleTime": 1.0,
+    "battleEnterRange": 2.0,
+    "chaseSpeed": 4.0,
+    "retreatSpeed": 1.4,
+    "stopDistance": 1.0,
+    "retreatDistance": 0.55,
+    "retreatBuffer": 0.15,
+    "battleKeepRange": 3.0,
+    "loseAggroTime": 2.0,
+    "attackCooldown": 2.0
+  },
+
+  "boss": {
+  }
+}

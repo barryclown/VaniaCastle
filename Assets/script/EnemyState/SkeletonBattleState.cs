@@ -8,18 +8,23 @@ public class SkeletonBattleState : EnemyState
     private float lastAttackTime;
 
     // ===== AI 可調整參數 =====
-    private const float chaseSpeed = 2f;
-    private const float retreatSpeed = 1.4f;
+    // 值來自 StreamingAssets/tuning.json 的 skeleton 區塊；該檔或該欄位不存在時，
+    // 退回 TuningData.CreateDefaults() 裡與原本寫死數字完全相同的預設值。
+    // 執行中改 JSON 存檔即生效（每幀直接讀，不需要重新進 state）。
+    private static float chaseSpeed => GameTuning.Skeleton.chaseSpeed;
+    private static float retreatSpeed => GameTuning.Skeleton.retreatSpeed;
 
-    private const float stopDistance = 1.0f;
-    private const float retreatDistance = 0.55f;
-    private const float retreatBuffer = 0.15f;
+    private static float stopDistance => GameTuning.Skeleton.stopDistance;
+    private static float retreatDistance => GameTuning.Skeleton.retreatDistance;
+    private static float retreatBuffer => GameTuning.Skeleton.retreatBuffer;
     private const float minFlipXDistance = 0.2f;
     // 🔸 這個是「保持戰鬥距離」，要比 GroundState 的 battleEnterRange 大一點
-    private const float battleKeepRange = 3f;
+    private static float battleKeepRange => GameTuning.Skeleton.battleKeepRange;
 
     // 🔸 看不到玩家多久才真的退戰
-    private const float loseAggroTime = 2f;
+    private static float loseAggroTime => GameTuning.Skeleton.loseAggroTime;
+    // 🔸 攻擊冷卻（原本寫死在 Update 裡的 Time.time + 2f）
+    private static float attackCooldown => GameTuning.Skeleton.attackCooldown;
     private float loseAggroTimer;
 
     public SkeletonBattleState(Enemy enemy, EnemyStateMachine stateMachine, string animBoolName, Skeleton sk)
@@ -70,7 +75,7 @@ public class SkeletonBattleState : EnemyState
         else if (distance > stopDistance)
         {
             // 追擊
-            skeleton.SetVelocty(faceDir * chaseSpeed * 2f, skeleton.rb.velocity.y);
+            skeleton.SetVelocty(faceDir * chaseSpeed, skeleton.rb.velocity.y);
         }
         else
         {
@@ -99,7 +104,7 @@ public class SkeletonBattleState : EnemyState
                 if (Time.time >= lastAttackTime)
                 {
                     skeleton.SetVelocty(0, skeleton.rb.velocity.y);
-                    lastAttackTime = Time.time + 2f;
+                    lastAttackTime = Time.time + attackCooldown;
                     stateMachine.ChangeState(skeleton.attackState);
                 }
             }

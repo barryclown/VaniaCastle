@@ -25,7 +25,7 @@ public class PlayerMoveState : PlayerGroundState
         {
             player.stateMachine.ChangeState(player.idleState);
         }
-        player.SetVelocty(xInput * 4, player.rb.velocity.y);
+        player.SetVelocty(xInput * GameTuning.Player.moveSpeed, player.rb.velocity.y);
         
     }
 }

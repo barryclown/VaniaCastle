@@ -43,6 +43,23 @@ public class Entity : MonoBehaviour
     public int MaxHealth => maxHealth;
     public bool IsDead => currentHealth <= 0;
 
+    /// <summary>
+    /// 由數值覆寫層（TuningRuntime）改動最大血量。
+    /// 場景剛載入時 currentHealth 還是 0，Start() 之後才會填滿，所以這裡只做夾擠；
+    /// 原本是滿血才跟著補到新上限，避免熱重載調高上限後角色永遠差一截。
+    /// </summary>
+    public void SetMaxHealth(int value)
+    {
+        if (value <= 0)
+            return;
+
+        bool wasFull = currentHealth > 0 && currentHealth >= maxHealth;
+        maxHealth = value;
+
+        if (wasFull || currentHealth > maxHealth)
+            currentHealth = maxHealth;
+    }
+
     protected virtual void Awake()
     {
     }

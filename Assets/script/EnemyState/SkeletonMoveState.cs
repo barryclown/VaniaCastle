@@ -24,7 +24,7 @@ public class SkeletonMoveState : SkeletonGroundState
         base.Update();
 
         // 持續往前走
-        skeleton.SetVelocty(skeleton.facingDir * 1f, skeleton.rb.velocity.y);
+        skeleton.SetVelocty(skeleton.facingDir * GameTuning.Skeleton.patrolSpeed, skeleton.rb.velocity.y);
 
         // ---------- 地板 / 牆壁判斷 ----------
 
@@ -32,7 +32,7 @@ public class SkeletonMoveState : SkeletonGroundState
         if (skeleton.IsWallDetected())
         {
             skeleton.Flip(!skeleton.isFacingRight);
-            skeleton.SetVelocty(skeleton.facingDir * 1f, skeleton.rb.velocity.y);
+            skeleton.SetVelocty(skeleton.facingDir * GameTuning.Skeleton.patrolSpeed, skeleton.rb.velocity.y);
             return;
         }
 
@@ -40,7 +40,7 @@ public class SkeletonMoveState : SkeletonGroundState
         if (!skeleton.IsGroundDetected())
         {
             skeleton.Flip(!skeleton.isFacingRight);
-            skeleton.SetVelocty(skeleton.facingDir * 1f, skeleton.rb.velocity.y);
+            skeleton.SetVelocty(skeleton.facingDir * GameTuning.Skeleton.patrolSpeed, skeleton.rb.velocity.y);
             return;
         }
     }

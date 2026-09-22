@@ -13,7 +13,7 @@ public class SkeletonIdleState : SkeletonGroundState
     {
         base.Enter();
         
-        stateTimer = 1f; // 停留 Idle 時間
+        stateTimer = GameTuning.Skeleton.idleTime; // 停留 Idle 時間（tuning.json: skeleton.idleTime）
     }
 
     public override void Exit()

@@ -15,7 +15,7 @@ public class PlayerCounterAttackState : PlayerState
     {
         base.Enter();
         // ��l��
-        stateTimer = 0.5f; // �o�O�u�\�X�[�աv���ݼĤH�������ɶ�
+        stateTimer = GameTuning.Player.counterWindow; // �o�O�u�\�X�[�աv���ݼĤH�������ɶ�
         isCountering = false;
         player.anim.SetBool("CounterAttackSuccess", false);
     }
@@ -54,7 +54,9 @@ public class PlayerCounterAttackState : PlayerState
                 triggerCalled = false;
 
                 // 反擊成功造成傷害（反擊高回報＝玩家攻擊力 2 倍）
-                enemy.Damage(player.attackDamage * 2, enemy.IsBackAttacked(player.transform.position));
+                enemy.Damage(
+                    Mathf.RoundToInt(player.attackDamage * GameTuning.Player.counterDamageMultiplier),
+                    enemy.IsBackAttacked(player.transform.position));
             }
         }
 

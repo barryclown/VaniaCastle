@@ -12,7 +12,7 @@ public class PlayerDashState : PlayerState
     public override void Enter()
     {
         base.Enter();       
-        stateTimer = 0.2f;
+        stateTimer = GameTuning.Player.dashDuration;
         SkillManager.instance.Clone.CreatClone();
     }
 
@@ -26,7 +26,7 @@ public class PlayerDashState : PlayerState
     {
         base.Update();
         
-        player.SetVelocty(25f * player.facingDir, 0);
+        player.SetVelocty(GameTuning.Player.dashSpeed * player.facingDir, 0);
         if (stateTimer < 0)
         {
             player.stateMachine.ChangeState(player.idleState);
